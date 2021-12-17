@@ -6,7 +6,6 @@ import com.example.ktrotest.data.dailyBoxOffice.local.DailyBoxOfficeLocalDataSou
 import com.example.ktrotest.data.dailyBoxOffice.remote.DailyBoxOfficeRemoteDataSource
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
 import javax.inject.Singleton
 
 @Module
