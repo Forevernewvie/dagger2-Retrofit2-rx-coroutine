@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.ktrotest.OnDataListenSuccessOrFail
 import com.example.ktrotest.data.dailyBoxOffice.BoxOfficeDataBase
+import com.example.ktrotest.data.dailyBoxOffice.DailyBoxOfficeRepository
 import com.example.ktrotest.data.dailyBoxOffice.DailyBoxOfficeRepositoryImpl
 import com.example.ktrotest.data.dailyBoxOffice.local.DailyBoxOfficeLocalDataSourceImpl
 import com.example.ktrotest.data.dailyBoxOffice.remote.DailyBoxOfficeRemoteDataSourceImpl
@@ -16,11 +17,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import javax.inject.Inject
 
 
-class MainViewModel(application: Application):AndroidViewModel(application) {
+class MainViewModel @Inject constructor(
+    private val dailyBoxOfficeRepository: DailyBoxOfficeRepository
+    ): ViewModel() {
 
-    private lateinit var dailyBoxOfficeRepository:DailyBoxOfficeRepositoryImpl
     private val _dailyBoxOfficeInfo = MutableLiveData<OfficeResult>()
 
     val dailyBoxOfficeInfo: LiveData<OfficeResult> = _dailyBoxOfficeInfo
@@ -37,14 +40,11 @@ class MainViewModel(application: Application):AndroidViewModel(application) {
     val day:LiveData<Int>
         get() = _day
 
-    //초기화 repository 좋은 패턴은 아닌듯함
+
     init {
-        viewModelScope.launch {
-            val boxOfficeDao = BoxOfficeDataBase.getDatabase(application.applicationContext)!!.boxOfficeDao()
-            val local = DailyBoxOfficeLocalDataSourceImpl(boxOfficeDao)
-            val remote = DailyBoxOfficeRemoteDataSourceImpl()
-            dailyBoxOfficeRepository = DailyBoxOfficeRepositoryImpl(remote,local)
-        }
+        _year.value = 2021
+        _month.value = 12
+        _day.value = 1
     }
 
     suspend fun getMovieName() : List<String> {

@@ -1,4 +1,4 @@
-package com.example.ktrotest.data.dailyBoxOffice.di.data
+package com.example.ktrotest.di.data
 
 import android.content.Context
 import androidx.room.Room
@@ -11,26 +11,26 @@ import dagger.Provides
 import dagger.Reusable
 import javax.inject.Singleton
 
-@Module  //이 의존성을 주입하겠다! 하는 함수를 만드는곳?
-class LocalDataModule {
+@Module
+class LocalModule {
 
-    @Provides
     @Singleton
+    @Provides
     fun providesRoomDatabase(context: Context) : BoxOfficeDataBase{
         return Room.databaseBuilder(
             context,
             BoxOfficeDataBase::class.java,
-            "BoxOfficeDB"
+            "BoxOfficeRoom.db"
         ).build()
     }
 
-    @Provides
-    @Singleton
-    fun providesBoxOfficeDao(roomDatabase: BoxOfficeDataBase): BoxOfficeDao = roomDatabase.boxOfficeDao()
-
-    @Provides
     @Reusable
-    fun providesDailyBoxOfficeLocalDataSource(boxOfficeDao: BoxOfficeDao) : DailyBoxOfficeLocalDataSource{
+    @Provides
+    fun providesBoxOfficeDao(boxOfficeDataBase: BoxOfficeDataBase): BoxOfficeDao = boxOfficeDataBase.boxOfficeDao()
+
+    @Singleton
+    @Provides
+    fun provideBoxOfficeLocalDataSource(boxOfficeDao: BoxOfficeDao): DailyBoxOfficeLocalDataSource{
         return DailyBoxOfficeLocalDataSourceImpl(boxOfficeDao)
     }
 

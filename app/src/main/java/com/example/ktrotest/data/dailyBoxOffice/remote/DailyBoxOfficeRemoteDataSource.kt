@@ -7,5 +7,5 @@ interface DailyBoxOfficeRemoteDataSource {
 }
 
 interface OnBoxOfficeDataListener{
-    fun success(offcieResult: OfficeResult)
+    fun success(officeResult: OfficeResult)
 }

@@ -11,19 +11,4 @@ import com.example.ktrotest.room.BoxOffice
 @Database(entities = [BoxOffice::class], version = 1)
 abstract class BoxOfficeDataBase :RoomDatabase() {
     abstract fun boxOfficeDao() : BoxOfficeDao
-
-    companion object {
-        private var INSTANCE : BoxOfficeDataBase? = null
-        fun getDatabase(context: Context) : BoxOfficeDataBase {
-            if (INSTANCE == null) {
-                synchronized(this) {
-                    INSTANCE =
-                        Room.databaseBuilder(context.applicationContext,
-                            BoxOfficeDataBase::class.java, "boxOffice")
-                            .build()
-                }
-            }
-            return INSTANCE!!
-        }
-    }
 }
