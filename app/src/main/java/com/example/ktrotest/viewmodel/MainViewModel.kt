@@ -15,6 +15,8 @@ class MainViewModel @Inject constructor(
     private val dailyBoxOfficeRepository: DailyBoxOfficeRepository
     ): ViewModel() {
 
+    //뷰모델
+
     private val _dailyBoxOfficeInfo = MutableLiveData<List<DailyBoxOffice>>()
     val dailyBoxOfficeInfo: LiveData<List<DailyBoxOffice>> = _dailyBoxOfficeInfo
 
