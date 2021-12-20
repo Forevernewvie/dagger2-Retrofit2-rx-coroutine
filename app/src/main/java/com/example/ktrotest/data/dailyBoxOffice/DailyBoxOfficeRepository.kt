@@ -1,13 +1,13 @@
 package com.example.ktrotest.data.dailyBoxOffice
 
-import com.example.ktrotest.OnDataListenSuccessOrFail
+import com.example.ktrotest.model.DailyBoxOffice
 import com.example.ktrotest.model.OfficeResult
-import com.example.ktrotest.room.BoxOffice
+import kotlinx.coroutines.flow.Flow
 
 interface DailyBoxOfficeRepository {
-   suspend fun fetchBoxOfficeData(targetDt:String,callback:OnDataListenSuccessOrFail<OfficeResult>)
-   suspend fun insertBoxOfficeData(boxOffice: BoxOffice)
-   suspend fun requestBoxOffice() : List<BoxOffice>
+   fun fetchBoxOfficeData(targetDt:String):Flow<List<DailyBoxOffice>>
+   suspend fun insertBoxOfficeData(boxOffice: DailyBoxOffice)
+   fun requestBoxOffice() : Flow<List<DailyBoxOffice>>
    suspend fun deleteBoxOffice()
-   suspend fun requestMovieName() : List<String>
+   fun requestMovieName() : Flow<List<String>>
 }

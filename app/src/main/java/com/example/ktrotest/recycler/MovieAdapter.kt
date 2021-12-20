@@ -7,6 +7,7 @@ import com.example.ktrotest.base.BaseDataBindingViewHolder
 import com.example.ktrotest.databinding.MovieItemBinding
 import com.example.ktrotest.model.DailyBoxOffice
 
+
 class MovieAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var boxOfficeInfo = mutableListOf<DailyBoxOffice>()

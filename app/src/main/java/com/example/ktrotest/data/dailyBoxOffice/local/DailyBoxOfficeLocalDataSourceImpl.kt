@@ -1,8 +1,7 @@
 package com.example.ktrotest.data.dailyBoxOffice.local
 
-import android.content.Context
-import com.example.ktrotest.data.dailyBoxOffice.BoxOfficeDataBase
-import com.example.ktrotest.room.BoxOffice
+import com.example.ktrotest.model.DailyBoxOffice
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DailyBoxOfficeLocalDataSourceImpl @Inject constructor (
@@ -10,11 +9,11 @@ class DailyBoxOfficeLocalDataSourceImpl @Inject constructor (
 )
     : DailyBoxOfficeLocalDataSource {
 
-    override suspend fun insert(boxOffice: BoxOffice) {
+    override suspend fun insert(boxOffice: DailyBoxOffice) {
         boxOfficeDao.insert(boxOffice)
     }
 
-    override suspend fun getBoxOffice(): List<BoxOffice> {
+    override fun getBoxOffice(): Flow<List<DailyBoxOffice>> {
        return boxOfficeDao.getBoxOffice()
     }
 
@@ -22,7 +21,7 @@ class DailyBoxOfficeLocalDataSourceImpl @Inject constructor (
         boxOfficeDao.delete()
     }
 
-    override suspend fun getMovieName(): List<String> {
+    override  fun getMovieName(): Flow<List<String>> {
         return boxOfficeDao.getMovieName()
     }
 }

@@ -1,11 +1,8 @@
 package com.example.ktrotest.data.dailyBoxOffice.remote
 
-import com.example.ktrotest.model.OfficeResult
+import com.example.ktrotest.model.DailyBoxOffice
+import kotlinx.coroutines.flow.Flow
 
 interface DailyBoxOfficeRemoteDataSource {
-    suspend fun fetchBoxOfficeData(targetDt:String, callback: OnBoxOfficeDataListener)
-}
-
-interface OnBoxOfficeDataListener{
-    fun success(officeResult: OfficeResult)
+    fun fetchBoxOfficeData(targetDt:String): Flow<List<DailyBoxOffice>>
 }

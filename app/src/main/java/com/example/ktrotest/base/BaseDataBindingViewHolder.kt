@@ -7,6 +7,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
+// 위밋 앱 코드 참조 작성
+
 abstract class BaseDataBindingViewHolder<T: ViewDataBinding, DATA>(
     parent: ViewGroup,
     @LayoutRes id: Int,

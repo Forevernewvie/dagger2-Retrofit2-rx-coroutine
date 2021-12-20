@@ -1,41 +1,26 @@
 package com.example.ktrotest.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.ktrotest.R
 import com.example.ktrotest.base.BaseActivity
-import com.example.ktrotest.data.dailyBoxOffice.DailyBoxOfficeRepository
-import com.example.ktrotest.data.dailyBoxOffice.local.BoxOfficeDao
-import com.example.ktrotest.data.dailyBoxOffice.local.DailyBoxOfficeLocalDataSourceImpl
 import com.example.ktrotest.databinding.ActivityMainBinding
 import com.example.ktrotest.di.MainComponent
 import com.example.ktrotest.di.MyApp
-import com.example.ktrotest.di.ViewModelFactory
 import com.example.ktrotest.model.DailyBoxOffice
 import com.example.ktrotest.recycler.MovieAdapter
-import com.example.ktrotest.room.BoxOffice
 import com.example.ktrotest.viewmodel.MainViewModel
-import io.ktor.utils.io.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
-    companion object{
-        const val SQL = "SQL"
-    }
-
-    lateinit var mainComponent: MainComponent
-
-    private lateinit var mainViewModel: MainViewModel
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-
-
+    lateinit var mainComponent: MainComponent
+    private lateinit var mainViewModel: MainViewModel
     private lateinit var date:String
     private val movieAdapter = MovieAdapter()
 
@@ -49,24 +34,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         initNumberPicker()
         initRecyclerView()
 
-
-
         mainViewModel.dailyBoxOfficeInfo.observe(this,{
-            movieAdapter.setData(it .boxOfficeResult.dailyBoxOfficeList as ArrayList<DailyBoxOffice>)
+            movieAdapter.setData(it as ArrayList<DailyBoxOffice>)
         })
 
         binding.requestMovienameBtn.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val sqlTest = mainViewModel.getMovieName()
-                Log.d(SQL, "onCreate: ${sqlTest}")
+                mainViewModel.getMovieName().collect {
+                    binding.testString.text = it.toString()
+                }
             }
         }
 
-
         binding.requestBtn.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val test = mainViewModel.getBoxOfficeInfo()
-                Log.d(SQL, "onCreate: $test")
+                mainViewModel.getBoxOfficeInfo().collect {
+                    binding.testString.text = it.toString()
+                }
             }
         }
 
@@ -76,12 +60,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             }
         }
 
-
         binding.saveBtn.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val test = mainViewModel.dailyBoxOfficeInfo.value?.boxOfficeResult?.dailyBoxOfficeList
-                test?.forEach {
-                    mainViewModel.addUser(BoxOffice(it.rank,it.movieNm,it.openDt))
+                mainViewModel.dailyBoxOfficeInfo.value?.forEach {
+                    mainViewModel.addUser(it)
                 }
             }
         }

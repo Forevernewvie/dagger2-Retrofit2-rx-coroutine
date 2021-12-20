@@ -1,14 +1,11 @@
 package com.example.ktrotest.data.dailyBoxOffice
 
-import com.example.ktrotest.OnDataListenSuccessOrFail
-import com.example.ktrotest.data.dailyBoxOffice.local.BoxOfficeDao
+
 import com.example.ktrotest.data.dailyBoxOffice.local.DailyBoxOfficeLocalDataSource
-import com.example.ktrotest.data.dailyBoxOffice.local.DailyBoxOfficeLocalDataSourceImpl
 import com.example.ktrotest.data.dailyBoxOffice.remote.DailyBoxOfficeRemoteDataSource
-import com.example.ktrotest.data.dailyBoxOffice.remote.DailyBoxOfficeRemoteDataSourceImpl
-import com.example.ktrotest.data.dailyBoxOffice.remote.OnBoxOfficeDataListener
+import com.example.ktrotest.model.DailyBoxOffice
 import com.example.ktrotest.model.OfficeResult
-import com.example.ktrotest.room.BoxOffice
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DailyBoxOfficeRepositoryImpl @Inject constructor(
@@ -16,25 +13,17 @@ class DailyBoxOfficeRepositoryImpl @Inject constructor(
     private val dailyBoxOfficeLocalDataSource: DailyBoxOfficeLocalDataSource
 ): DailyBoxOfficeRepository{
 
-    override suspend fun fetchBoxOfficeData(
-        targetDt: String,
-        callback: OnDataListenSuccessOrFail<OfficeResult>
-    ) {
 
-        dailyBoxOfficeRemoteDataSource.fetchBoxOfficeData(targetDt,object :OnBoxOfficeDataListener{
-            override fun success(offcieResult: OfficeResult) {
-                callback.success(offcieResult)
-            }
-          }
-        )
+    override fun fetchBoxOfficeData(targetDt: String): Flow<List<DailyBoxOffice>> {
+        return dailyBoxOfficeRemoteDataSource.fetchBoxOfficeData(targetDt)
     }
 
-    override suspend fun insertBoxOfficeData(boxOffice: BoxOffice) {
+    override suspend fun insertBoxOfficeData(boxOffice: DailyBoxOffice) {
         dailyBoxOfficeLocalDataSource.insert(boxOffice)
     }
 
 
-    override suspend fun requestBoxOffice(): List<BoxOffice> {
+    override  fun requestBoxOffice(): Flow<List<DailyBoxOffice>> {
         return dailyBoxOfficeLocalDataSource.getBoxOffice()
     }
 
@@ -42,7 +31,7 @@ class DailyBoxOfficeRepositoryImpl @Inject constructor(
         dailyBoxOfficeLocalDataSource.delete()
     }
 
-    override suspend fun requestMovieName(): List<String> {
+    override  fun requestMovieName(): Flow<List<String>> {
         return dailyBoxOfficeLocalDataSource.getMovieName()
     }
 

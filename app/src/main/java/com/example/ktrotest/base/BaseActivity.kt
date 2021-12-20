@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 
+// 위밋 앱 코드 참조 작성
+
 abstract class BaseActivity<B: ViewDataBinding>(
     @LayoutRes val layoutId: Int
 ) :AppCompatActivity() {
