@@ -18,6 +18,10 @@ class MainViewModel @Inject constructor(
     private val _dailyBoxOfficeInfo = MutableLiveData<List<DailyBoxOffice>>()
     val dailyBoxOfficeInfo: LiveData<List<DailyBoxOffice>> = _dailyBoxOfficeInfo
 
+    private val _testString = MutableLiveData<String>()
+    val testString:LiveData<String>
+        get() = _testString
+
     //양방향 데이터 바인딩, 접근 제한자 있으면 동작안됨
     val _year = MutableLiveData<Int>()
     val year:LiveData<Int>
@@ -40,16 +44,20 @@ class MainViewModel @Inject constructor(
         }
     }
 
-     fun getMovieName() : Flow<List<String>> {
-        return dailyBoxOfficeRepository.requestMovieName()
+     suspend fun getMovieName() {
+       dailyBoxOfficeRepository.requestMovieName().collect {
+           _testString.postValue(it.toString())
+       }
     }
 
      suspend fun addUser(boxOffice: DailyBoxOffice){
          dailyBoxOfficeRepository.insertBoxOfficeData(boxOffice)
     }
 
-     fun getBoxOfficeInfo() :Flow<List<DailyBoxOffice>>  {
-         return dailyBoxOfficeRepository.requestBoxOffice()
+     suspend fun getBoxOfficeInfo()   {
+         dailyBoxOfficeRepository.requestBoxOffice().collect {
+             _testString.postValue(it.toString())
+         }
     }
 
     suspend fun deleteBoxOfficeInfo(){

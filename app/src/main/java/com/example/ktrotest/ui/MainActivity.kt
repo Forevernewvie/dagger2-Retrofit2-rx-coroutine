@@ -28,55 +28,51 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
         mainComponent = (application as MyApp).appComponent.mainComponent().create()
         mainComponent.inject(this)
-        mainViewModel = ViewModelProvider(this,viewModelFactory)[MainViewModel::class.java]
+        mainViewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
         binding.mainVM = mainViewModel
 
         initNumberPicker()
         initRecyclerView()
 
-        mainViewModel.dailyBoxOfficeInfo.observe(this,{
+        mainViewModel.dailyBoxOfficeInfo.observe(this, {
             movieAdapter.setData(it as ArrayList<DailyBoxOffice>)
         })
 
         binding.requestMovienameBtn.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                mainViewModel.getMovieName().collect {
-                    binding.testString.text = it.toString()
-                }
+                mainViewModel.getMovieName()
             }
         }
 
         binding.requestBtn.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                mainViewModel.getBoxOfficeInfo().collect {
-                    binding.testString.text = it.toString()
+                mainViewModel.getBoxOfficeInfo()
+            }
+
+            binding.deleteBtn.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    mainViewModel.deleteBoxOfficeInfo()
                 }
             }
-        }
 
-        binding.deleteBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                mainViewModel.deleteBoxOfficeInfo()
-            }
-        }
-
-        binding.saveBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                mainViewModel.dailyBoxOfficeInfo.value?.forEach {
-                    mainViewModel.addUser(it)
+            binding.saveBtn.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    mainViewModel.dailyBoxOfficeInfo.value?.forEach {
+                        mainViewModel.addUser(it)
+                    }
                 }
             }
-        }
 
-        binding.btn.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                date = mainViewModel.getDateInfo()
-                mainViewModel.getMovieInfo(date)
+            binding.btn.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    date = mainViewModel.getDateInfo()
+                    mainViewModel.getMovieInfo(date)
+                }
             }
+
         }
 
     }
-
     private fun initRecyclerView(){
         binding.movieItem.layoutManager = LinearLayoutManager(applicationContext)
         binding.movieItem.adapter =movieAdapter
