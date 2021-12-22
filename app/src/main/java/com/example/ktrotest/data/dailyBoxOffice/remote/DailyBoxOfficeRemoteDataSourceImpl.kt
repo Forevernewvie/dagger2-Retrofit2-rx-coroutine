@@ -13,16 +13,11 @@ import javax.inject.Inject
 class DailyBoxOfficeRemoteDataSourceImpl @Inject constructor
     (private val httpClient: HttpClient) : DailyBoxOfficeRemoteDataSource {
 
-    override fun fetchBoxOfficeData(targetDt: String): Flow<List<DailyBoxOffice>> = flow {
-            val result = httpClient.get<OfficeResult>(Api.url){
+    override fun remoteFetchBoxOfficeData(targetDt: String): Flow<List<DailyBoxOffice>> = flow {
+            httpClient.get<OfficeResult>(Api.URL){
                 method = HttpMethod.Get
-                parameter("key",Api.key)
+                parameter("key",Api.KEY)
                 parameter("targetDt",targetDt)
-            }
-        val data = result.boxOfficeResult.dailyBoxOfficeList
-        // data 발행/생성
-        emit(data.filter {
-            it.rank.toInt() <=5
-        })
+            }.run { emit(this.boxOfficeResult.dailyBoxOfficeList) }
     }
 }

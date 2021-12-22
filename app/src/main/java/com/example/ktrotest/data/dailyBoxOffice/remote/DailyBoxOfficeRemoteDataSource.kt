@@ -4,5 +4,5 @@ import com.example.ktrotest.model.DailyBoxOffice
 import kotlinx.coroutines.flow.Flow
 
 interface DailyBoxOfficeRemoteDataSource {
-    fun fetchBoxOfficeData(targetDt:String): Flow<List<DailyBoxOffice>>
+    fun remoteFetchBoxOfficeData(targetDt:String): Flow<List<DailyBoxOffice>>
 }

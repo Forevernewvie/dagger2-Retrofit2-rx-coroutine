@@ -13,26 +13,24 @@ class DailyBoxOfficeRepositoryImpl @Inject constructor(
     private val dailyBoxOfficeLocalDataSource: DailyBoxOfficeLocalDataSource
 ): DailyBoxOfficeRepository{
 
-
-    override fun fetchBoxOfficeData(targetDt: String): Flow<List<DailyBoxOffice>> {
-        return dailyBoxOfficeRemoteDataSource.fetchBoxOfficeData(targetDt)
+    override fun remoteFetchBoxOfficeData(targetDt: String): Flow<List<DailyBoxOffice>> {
+        return dailyBoxOfficeRemoteDataSource.remoteFetchBoxOfficeData(targetDt)
     }
 
     override suspend fun insertBoxOfficeData(boxOffice: DailyBoxOffice) {
         dailyBoxOfficeLocalDataSource.insert(boxOffice)
     }
 
-
-    override  fun requestBoxOffice(): Flow<List<DailyBoxOffice>> {
-        return dailyBoxOfficeLocalDataSource.getBoxOffice()
+    override fun localFetchBoxOffice(): Flow<List<DailyBoxOffice>> {
+        return dailyBoxOfficeLocalDataSource.localFetchBoxOffice()
     }
 
     override suspend fun deleteBoxOffice() {
         dailyBoxOfficeLocalDataSource.delete()
     }
 
-    override  fun requestMovieName(): Flow<List<String>> {
-        return dailyBoxOfficeLocalDataSource.getMovieName()
+    override fun localFetchMovieName(): Flow<List<String>> {
+        return dailyBoxOfficeLocalDataSource.localFetchMovieName()
     }
 
 }
