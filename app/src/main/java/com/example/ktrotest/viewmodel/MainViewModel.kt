@@ -85,8 +85,6 @@ class MainViewModel @Inject constructor(
     }
 
     fun getDailyBoxOfficeInfo(date:String) =viewModelScope.launch(Dispatchers.IO) {
-        dailyBoxOfficeRepository.remoteFetchBoxOfficeData(date).collect {
-            _dailyBoxOfficeInfo.postValue(it)   //데이터 수집(소비)
-        }
+        _dailyBoxOfficeInfo.postValue(dailyBoxOfficeRepository.remoteFetchBoxOfficeData(date))
     }
 }

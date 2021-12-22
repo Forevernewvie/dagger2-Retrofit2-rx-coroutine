@@ -5,7 +5,7 @@ import com.example.ktrotest.model.OfficeResult
 import kotlinx.coroutines.flow.Flow
 
 interface DailyBoxOfficeRepository {
-   fun remoteFetchBoxOfficeData(targetDt:String):Flow<List<DailyBoxOffice>>
+   suspend fun remoteFetchBoxOfficeData(targetDt:String):List<DailyBoxOffice>
    suspend fun insertBoxOfficeData(boxOffice: DailyBoxOffice)
    fun localFetchBoxOffice() : Flow<List<DailyBoxOffice>>
    suspend fun deleteBoxOffice()
