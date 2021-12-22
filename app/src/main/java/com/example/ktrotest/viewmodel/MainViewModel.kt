@@ -1,14 +1,15 @@
 package com.example.ktrotest.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktrotest.data.dailyBoxOffice.DailyBoxOfficeRepository
 import com.example.ktrotest.model.DailyBoxOffice
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 
@@ -36,43 +37,44 @@ class MainViewModel @Inject constructor(
     val day: LiveData<Int>
         get() = _day
 
-
     init {
-        viewModelScope.launch {
-            _year.value = 2021
-            _month.value = 12
-            _day.value = 1
-        }
+        _year.value = 2021
+        _month.value = 12
+        _day.value = 1
     }
 
-    suspend fun getMovieName() {
-        dailyBoxOfficeRepository.fetchMovieName().collect {
+    //room movieName fetch
+    fun getMovieName() =viewModelScope.launch(Dispatchers.IO) {
+        dailyBoxOfficeRepository.localFetchMovieName().collect {
             _fetchMsg.postValue(it.toString())
         }
     }
 
-    suspend fun addUser(boxOffice: DailyBoxOffice){
-        dailyBoxOfficeRepository.insertBoxOfficeData(boxOffice)
+    fun insertBoxOffice(boxOffice: DailyBoxOffice) = viewModelScope.launch(Dispatchers.IO) {
+            dailyBoxOfficeRepository.insertBoxOfficeData(boxOffice)
     }
 
-    suspend fun getBoxOfficeInfo()   {
-        dailyBoxOfficeRepository.fetchBoxOffice().collect {
+    //room entire boxOffice fetch
+    fun getBoxOfficeInfo() =viewModelScope.launch  {
+        dailyBoxOfficeRepository.localFetchBoxOffice().collect {
             _fetchMsg.postValue(it.toString())
         }
     }
 
-    suspend fun deleteBoxOfficeInfo(){
-        dailyBoxOfficeRepository.deleteBoxOffice()
+    //room delete
+    fun deleteBoxOfficeInfo() = viewModelScope.launch(Dispatchers.IO){
+            dailyBoxOfficeRepository.deleteBoxOffice()
     }
 
     private fun getMonthAndDay():String{
         var movieMonth = month.value.toString()
         var movieDay = day.value.toString()
-        movieMonth.let{
-            if(movieMonth.length<2){ movieMonth.map { movieMonth = "0$movieMonth"}}
+
+        if(movieMonth.length<2){
+            movieMonth = "0" + month.value.toString()
         }
-        movieDay.let {
-            if(movieDay.length<2){  movieDay.map { movieDay = "0$movieDay"}}
+        if ( movieDay.length<2){
+            movieDay = "0" + day.value.toString()
         }
         return movieMonth+movieDay
     }
@@ -82,8 +84,8 @@ class MainViewModel @Inject constructor(
         return year.value.toString()+getMonthAndDay()
     }
 
-    suspend fun getDailyBoxOfficeInfo(date:String) {
-        dailyBoxOfficeRepository.fetchBoxOfficeData(date).collect {
+    fun getDailyBoxOfficeInfo(date:String) =viewModelScope.launch(Dispatchers.IO) {
+        dailyBoxOfficeRepository.remoteFetchBoxOfficeData(date).collect {
             _dailyBoxOfficeInfo.postValue(it)   //데이터 수집(소비)
         }
     }
