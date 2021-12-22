@@ -31,7 +31,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         mainViewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
         binding.mainVM = mainViewModel
 
-        initNumberPicker()
         initRecyclerView()
 
         mainViewModel.dailyBoxOfficeInfo.observe(this, {
@@ -39,55 +38,34 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         })
 
         binding.requestMovienameBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
                 mainViewModel.getMovieName()
-            }
         }
 
-        binding.requestBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
+            binding.requestBtn.setOnClickListener {
                 mainViewModel.getBoxOfficeInfo()
             }
 
             binding.deleteBtn.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    mainViewModel.deleteBoxOfficeInfo()
-                }
+                mainViewModel.deleteBoxOfficeInfo()
             }
 
             binding.saveBtn.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    mainViewModel.dailyBoxOfficeInfo.value?.forEach {
-                        mainViewModel.addUser(it)
-                    }
+               mainViewModel.dailyBoxOfficeInfo.value?.forEach {
+                    mainViewModel.insertBoxOffice(it)
                 }
             }
 
             binding.btn.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
                     date = mainViewModel.getDateInfo()
-                    mainViewModel.getMovieInfo(date)
-                }
+                    mainViewModel.getDailyBoxOfficeInfo(date)
             }
-
         }
 
-    }
+
     private fun initRecyclerView(){
         binding.movieItem.layoutManager = LinearLayoutManager(applicationContext)
         binding.movieItem.adapter =movieAdapter
         binding.movieItem.setHasFixedSize(true)
-    }
-
-
-
-    private fun initNumberPicker(){
-        binding.year.maxValue = 2021
-        binding.year.minValue = 2000
-        binding.month.maxValue = 12
-        binding.month.minValue = 1
-        binding.day.maxValue = 31
-        binding.day.minValue = 1
     }
 
 }
