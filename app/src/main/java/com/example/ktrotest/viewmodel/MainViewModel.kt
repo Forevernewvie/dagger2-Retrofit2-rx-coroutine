@@ -7,11 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.ktrotest.data.dailyBoxOffice.DailyBoxOfficeRepository
 import com.example.ktrotest.model.DailyBoxOffice
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+//flow는 연속된 데이터를 내보내지만
+//suspend fun은 연속된 값을 반환할수 없다 -> 난 지금 List를 통째로 리턴 flow 사용할 필요가 있나 -> 코드 수
 
 class MainViewModel @Inject constructor(
     private val dailyBoxOfficeRepository: DailyBoxOfficeRepository

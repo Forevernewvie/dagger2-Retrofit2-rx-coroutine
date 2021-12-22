@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ktroTest</string>
+    <string name="insert_test">삽입</string>
+    <string name="delete_test">삭제</string>
+    <string name="select_moviename">room영화조회</string>
+    <string name="ktor_request">조회</string>
+   <string name="year">년</string>
+    <string name="month">월</string>
+    <string name="day">일</string>
+    <string name="select_boxoffice">room조회</string>
 </resources>
