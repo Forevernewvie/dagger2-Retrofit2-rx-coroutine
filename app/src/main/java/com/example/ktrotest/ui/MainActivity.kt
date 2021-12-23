@@ -21,7 +21,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var mainComponent: MainComponent
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var date:String
     private val movieAdapter = MovieAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,30 +35,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         mainViewModel.dailyBoxOfficeInfo.observe(this, {
             movieAdapter.setData(it as ArrayList<DailyBoxOffice>)
         })
-
-        binding.requestMovienameBtn.setOnClickListener {
-                mainViewModel.getMovieName()
-        }
-
-            binding.requestBtn.setOnClickListener {
-                mainViewModel.getBoxOfficeInfo()
-            }
-
-            binding.deleteBtn.setOnClickListener {
-                mainViewModel.deleteBoxOfficeInfo()
-            }
-
-            binding.saveBtn.setOnClickListener {
-               mainViewModel.dailyBoxOfficeInfo.value?.forEach {
-                    mainViewModel.insertBoxOffice(it)
-                }
-            }
-
-            binding.btn.setOnClickListener {
-                    date = mainViewModel.getDateInfo()
-                    mainViewModel.getDailyBoxOfficeInfo(date)
-            }
-        }
+    }
 
 
     private fun initRecyclerView(){
