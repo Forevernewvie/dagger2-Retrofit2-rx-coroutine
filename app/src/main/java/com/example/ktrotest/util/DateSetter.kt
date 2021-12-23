@@ -28,5 +28,4 @@ object DateSetter {
     fun getMonth():Int = month.format(nowDate).toInt()
     fun getDate():Int = date.format(nowDate).toInt()
 
-
 }

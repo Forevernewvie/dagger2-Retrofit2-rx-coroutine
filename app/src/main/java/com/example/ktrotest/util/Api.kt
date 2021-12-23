@@ -1,4 +1,4 @@
-package com.example.ktrotest
+package com.example.ktrotest.util
 
 object Api {
     const val KEY ="154bc1716d28fb8a212340401c409a10"

@@ -1,13 +1,11 @@
 package com.example.ktrotest.data.dailyBoxOffice.remote
 
-import com.example.ktrotest.Api
+import com.example.ktrotest.util.Api
 import com.example.ktrotest.model.DailyBoxOffice
 import com.example.ktrotest.model.OfficeResult
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class DailyBoxOfficeRemoteDataSourceImpl @Inject constructor

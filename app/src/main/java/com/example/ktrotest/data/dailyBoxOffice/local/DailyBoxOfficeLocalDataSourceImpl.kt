@@ -12,6 +12,7 @@ class DailyBoxOfficeLocalDataSourceImpl @Inject constructor (
 
     override suspend fun insert(boxOffice: DailyBoxOffice) {
         boxOfficeDao.insert(boxOffice)
+
     }
 
     override fun localFetchBoxOffice(): Flow<List<DailyBoxOffice>> {
