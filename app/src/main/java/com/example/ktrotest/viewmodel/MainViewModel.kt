@@ -1,22 +1,23 @@
 package com.example.ktrotest.viewmodel
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+
+import android.content.ContentValues.TAG
+import android.util.Log
+import androidx.lifecycle.*
 import com.example.ktrotest.data.dailyBoxOffice.DailyBoxOfficeRepository
 import com.example.ktrotest.model.DailyBoxOffice
-import com.example.ktrotest.util.DateSetter
 import com.example.ktrotest.util.DateSetter.getDate
 import com.example.ktrotest.util.DateSetter.getMonth
 import com.example.ktrotest.util.DateSetter.getYear
+import com.example.ktrotest.util.DateSetter.nowDate
+import com.example.ktrotest.util.DateSetter.yesterDay
+import com.example.ktrotest.util.dateFormat
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 //flow는 연속된 데이터를 내보내지만
@@ -47,9 +48,9 @@ class MainViewModel @Inject constructor(
         get() = _day
 
     init {
-        _year.value = getYear()
-        _month.value = getMonth()
-        _day.value = getDate()
+        _year.value = getYear(nowDate)
+        _month.value = getMonth(nowDate)
+        _day.value = getDate(nowDate)
     }
 
     //room movieName fetch
@@ -77,25 +78,25 @@ class MainViewModel @Inject constructor(
         dailyBoxOfficeRepository.deleteBoxOffice()
     }
 
-    private fun getMonthAndDay():String{
-        var movieMonth = month.value.toString()
-        var movieDay = day.value.toString()
-
-        if(movieMonth.length<2){
-            movieMonth = "0${month.value.toString()}"
-        }
-        if ( movieDay.length<2){
-            movieDay = "0${day.value.toString()}"
-        }
-        return movieMonth+movieDay
-    }
-
-
     private fun getDateInfo():String{
-        return year.value.toString()+getMonthAndDay()
+        return _year.value.toString() + month.value?.dateFormat() + day.value?.dateFormat()
     }
+
+    private suspend fun occurErrorRequest() = viewModelScope.async(Dispatchers.IO){
+        return@async dailyBoxOfficeRepository.remoteFetchBoxOfficeData(
+            getYear(yesterDay).toString() + getMonth(yesterDay).dateFormat() + getDate(yesterDay).dateFormat()
+        )
+    }.await()
+
+
+    //err Handling 첫째. 데이터가 없을때 상황
 
     fun getDailyBoxOfficeByKtor() =viewModelScope.launch(Dispatchers.IO) {
-        _dailyBoxOfficeInfo.postValue(dailyBoxOfficeRepository.remoteFetchBoxOfficeData(getDateInfo()))
+        val result = dailyBoxOfficeRepository.remoteFetchBoxOfficeData(getDateInfo())
+        if(result.isNotEmpty()){
+            _dailyBoxOfficeInfo.postValue(result)
+        }else{
+            _dailyBoxOfficeInfo.postValue(occurErrorRequest())
+        }
     }
 }

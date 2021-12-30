@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/insert_test"
-        android:onClick="@{()->mainVM.insertBoxOffice()}"
+        android:onClick="@{() -> mainVM.insertBoxOffice()}"
         />
 
 
@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/request_btn"
         android:text="@string/delete_test"
-        android:onClick="@{()-> mainVM.deleteBoxOfficeInfo() }"
+        android:onClick="@{() -> mainVM.deleteBoxOfficeInfo() }"
         />
 
     <Button
@@ -52,7 +52,7 @@
         app:layout_constraintStart_toEndOf="@+id/request_btn"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/select_moviename"
-        android:onClick="@{()->mainVM.movieName}"
+        android:onClick="@{() -> mainVM.movieName}"
         />
 
     <Button
@@ -65,7 +65,7 @@
         app:layout_constraintStart_toEndOf="@+id/btn"
         app:layout_constraintEnd_toStartOf="@+id/save_btn"
         android:text="@string/select_boxoffice"
-        android:onClick="@{()->mainVM.boxOfficeInfo}"
+        android:onClick="@{() -> mainVM.boxOfficeInfo}"
         />
 
     <Button
@@ -78,7 +78,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/ktor_request"
-        android:onClick="@{()->mainVM.dailyBoxOfficeByKtor}"
+        android:onClick="@{() -> mainVM.dailyBoxOfficeByKtor}"
         />
 
     <com.example.ktrotest.ui.JaebinNumberPicker
@@ -90,9 +90,9 @@
         app:layout_constraintTop_toBottomOf="@id/movieItem"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.3"
-        max="2021"
-        min="2000"
         android:descendantFocusability="blocksDescendants"
+        app:min="2010"
+        app:max="2021"
         android:value="@={mainVM._year}"
         />
 
@@ -118,9 +118,9 @@
         app:layout_constraintStart_toEndOf="@+id/year"
         app:layout_constraintEnd_toStartOf="@+id/day"
         app:layout_constraintWidth_percent="0.14"
-        min = "1"
-        max = "12"
         android:descendantFocusability="blocksDescendants"
+        app:min="1"
+        app:max="12"
         android:value="@={mainVM._month}"
         />
 
@@ -160,8 +160,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintWidth_percent="0.14"
         android:descendantFocusability="blocksDescendants"
-        min = "1"
-        max = "31"
+        app:min="1"
+        app:max="31"
         android:value="@={mainVM._day}"
         />
 
