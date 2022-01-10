@@ -1,11 +1,13 @@
 package com.example.ktrotest.data.dailyBoxOffice
 
 
+import androidx.lifecycle.LiveData
 import com.example.ktrotest.data.dailyBoxOffice.local.DailyBoxOfficeLocalDataSource
 import com.example.ktrotest.data.dailyBoxOffice.remote.DailyBoxOfficeRemoteDataSource
 import com.example.ktrotest.model.DailyBoxOffice
 import com.example.ktrotest.model.OfficeResult
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Call
 import javax.inject.Inject
 
 class DailyBoxOfficeRepositoryImpl @Inject constructor(
@@ -14,7 +16,7 @@ class DailyBoxOfficeRepositoryImpl @Inject constructor(
 ): DailyBoxOfficeRepository{
 
     override suspend fun remoteFetchBoxOfficeData(targetDt: String): List<DailyBoxOffice> {
-        return dailyBoxOfficeRemoteDataSource.remoteFetchBoxOfficeData(targetDt)
+        return dailyBoxOfficeRemoteDataSource.remoteFetchBoxOfficeData(targetDt).boxOfficeResult.dailyBoxOfficeList
     }
 
     override suspend fun insertBoxOfficeData(boxOffice: DailyBoxOffice) {

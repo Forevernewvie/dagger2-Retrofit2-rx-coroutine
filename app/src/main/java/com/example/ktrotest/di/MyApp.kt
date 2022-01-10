@@ -1,6 +1,8 @@
 package com.example.ktrotest.di
 
+
 import android.app.Application
+import dagger.android.DaggerApplication
 
 class MyApp : Application() {
 

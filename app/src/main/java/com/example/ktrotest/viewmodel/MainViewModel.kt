@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.ktrotest.data.dailyBoxOffice.DailyBoxOfficeRepository
 import com.example.ktrotest.model.DailyBoxOffice
+import com.example.ktrotest.model.OfficeResult
+import com.example.ktrotest.util.Api
 import com.example.ktrotest.util.DateSetter.getDate
 import com.example.ktrotest.util.DateSetter.getMonth
 import com.example.ktrotest.util.DateSetter.getYear
@@ -17,6 +19,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -79,24 +83,16 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getDateInfo():String{
-        return _year.value.toString() + month.value?.dateFormat() + day.value?.dateFormat()
+        return year.value.toString() + month.value?.dateFormat() + day.value?.dateFormat()
     }
 
-    private suspend fun occurErrorRequest() = viewModelScope.async(Dispatchers.IO){
-        return@async dailyBoxOfficeRepository.remoteFetchBoxOfficeData(
-            getYear(yesterDay).toString() + getMonth(yesterDay).dateFormat() + getDate(yesterDay).dateFormat()
-        )
-    }.await()
 
 
     //err Handling 첫째. 데이터가 없을때 상황
 
-    fun getDailyBoxOfficeByKtor() =viewModelScope.launch(Dispatchers.IO) {
-        val result = dailyBoxOfficeRepository.remoteFetchBoxOfficeData(getDateInfo())
-        if(result.isNotEmpty()){
-            _dailyBoxOfficeInfo.postValue(result)
-        }else{
-            _dailyBoxOfficeInfo.postValue(occurErrorRequest())
+    fun getDailyBoxOfficeByKtor() =viewModelScope.launch {
+        _dailyBoxOfficeInfo.let {
+            it.postValue(dailyBoxOfficeRepository.remoteFetchBoxOfficeData(getDateInfo()))
         }
     }
 }

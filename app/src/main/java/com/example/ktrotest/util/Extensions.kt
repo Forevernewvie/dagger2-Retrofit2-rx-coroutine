@@ -20,8 +20,9 @@ suspend fun HttpClient.fetchBoxOfficeData(
 
 fun Int.dateFormat():String{
     val intToString = this.toString()
+
     return if(intToString.length<2){
-        intToString.format("0${this}")
+        "0${intToString}"
     }else{
         intToString
     }
