@@ -9,6 +9,7 @@ import com.example.ktrotest.model.ToastMessage
 import com.example.ktrotest.util.Event
 import com.example.ktrotest.util.Response
 import io.ktor.http.*
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ import kotlinx.coroutines.withContext
 
 open class BaseViewModel : ViewModel() {
 
+    protected val compositeDisposable = CompositeDisposable()
     val restartEvent = eventLiveData<Unit>()
     val toastMessage = eventLiveData<ToastMessage>()
     val errorPopup = eventLiveData<Response<*>?>()
@@ -93,4 +95,10 @@ open class BaseViewModel : ViewModel() {
 
     protected fun LiveData<Event<Unit>>.event() = value(Event(Unit))
     protected fun LiveData<Event<Unit>>.postEvent() = post(Event(Unit))
+
+    override fun onCleared() {
+        compositeDisposable.dispose()
+        super.onCleared()
+    }
+
 }

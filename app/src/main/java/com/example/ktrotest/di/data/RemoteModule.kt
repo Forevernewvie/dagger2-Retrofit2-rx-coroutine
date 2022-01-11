@@ -6,9 +6,11 @@ import com.example.ktrotest.model.MovieApi
 import com.example.ktrotest.util.Api
 import dagger.Module
 import dagger.Provides
+import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.json.*
+import io.reactivex.rxjava3.internal.schedulers.RxThreadFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -46,6 +48,7 @@ class RemoteModule {
         return Retrofit.Builder()
             .baseUrl(Api.BASE_URL)
             .addConverterFactory(factory)
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.createAsync())
             .client(okHttpClient)
             .build()
             .create(MovieApi::class.java)

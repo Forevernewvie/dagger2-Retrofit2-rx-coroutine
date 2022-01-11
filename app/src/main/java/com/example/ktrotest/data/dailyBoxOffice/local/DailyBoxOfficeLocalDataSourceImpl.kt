@@ -1,29 +1,26 @@
 package com.example.ktrotest.data.dailyBoxOffice.local
 
 import com.example.ktrotest.model.DailyBoxOffice
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 class DailyBoxOfficeLocalDataSourceImpl @Inject constructor (
     private val boxOfficeDao: BoxOfficeDao
-)
-    : DailyBoxOfficeLocalDataSource {
+):DailyBoxOfficeLocalDataSource {
 
-    override suspend fun insert(boxOffice: DailyBoxOffice) {
+    override fun insert(boxOffice: List<DailyBoxOffice>): Completable =
         boxOfficeDao.insert(boxOffice)
 
-    }
+    override fun localFetchBoxOffice(): Single<List<DailyBoxOffice>> =
+         boxOfficeDao.getBoxOffice()
 
-    override fun localFetchBoxOffice(): Flow<List<DailyBoxOffice>> {
-        return boxOfficeDao.getBoxOffice()
-    }
-
-    override suspend fun delete() {
+    override fun delete(): Completable =
         boxOfficeDao.delete()
-    }
 
-    override fun localFetchMovieName(): Flow<List<String>> {
-        return boxOfficeDao.getMovieName()
-    }
+    override fun localFetchMovieName(): Single<List<String>> =
+         boxOfficeDao.getMovieName()
+
 }

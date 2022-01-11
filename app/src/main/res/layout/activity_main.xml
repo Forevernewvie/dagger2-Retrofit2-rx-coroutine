@@ -52,7 +52,7 @@
         app:layout_constraintBottom_toTopOf="@+id/request_btn"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/select_moviename"
-        android:onClick="@{() -> mainVM.movieName}"
+        android:onClick="@{() -> mainVM.getMovieName()}"
         />
 
     <Button
@@ -65,7 +65,7 @@
         app:layout_constraintStart_toEndOf="@+id/btn"
         app:layout_constraintEnd_toStartOf="@+id/save_btn"
         android:text="@string/select_boxoffice"
-        android:onClick="@{() -> mainVM.boxOfficeInfo}"
+        android:onClick="@{() -> mainVM.getBoxOfficeInfo()}"
         />
     <Button
         android:id="@+id/event_btn"
@@ -85,12 +85,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="100dp"
-        android:onClick="@{() -> mainVM.getDailyBoxOfficeByKtor()}"
         android:text="@string/ktor_request"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/month"
-        app:layout_constraintVertical_bias="0.511" />
+        android:onClick="@{() -> mainVM.getDailyBoxOfficeByKtor()}"
+        />
 
     <com.example.ktrotest.ui.JaebinNumberPicker
         android:id="@+id/year"
@@ -104,7 +104,7 @@
         android:descendantFocusability="blocksDescendants"
         app:min="2010"
         app:max="2022"
-        android:value="@={mainVM._year}"
+        android:value="@={mainVM.year}"
         />
 
         <TextView
@@ -132,7 +132,7 @@
         android:descendantFocusability="blocksDescendants"
         app:min="1"
         app:max="12"
-        android:value="@={mainVM._month}"
+        android:value="@={mainVM.month}"
         />
 
 
@@ -173,7 +173,7 @@
         android:descendantFocusability="blocksDescendants"
         app:min="1"
         app:max="31"
-        android:value="@={mainVM._day}"
+        android:value="@={mainVM.day}"
         />
 
     <TextView

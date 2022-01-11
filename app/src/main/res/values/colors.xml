@@ -7,4 +7,88 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#FFFFFF</color>
+
+    <color name="primary_c01">#4DDBD2</color>
+    <color name="primary_c02">#7975FF</color>
+    <color name="primary_c02_1">#267975FF</color>
+    <color name="primary_c03">#FF5B6F</color>
+    <color name="primary_c04">#FFC83C</color>
+    <color name="primary_c05">#FFAE64</color>
+    <color name="primary_c05_1">#33FFAE64</color>
+    <color name="primary_c06">#FF8787</color>
+    <color name="primary_c07">#4584FF</color>
+    <color name="primary_c07_1">#264584FF</color>
+
+    <color name="gray_scale_b00">#FFFFFFFF</color>
+    <color name="gray_scale_b01">#FF000000</color>
+    <color name="gray_scale_b02">#CC000000</color>
+    <color name="gray_scale_b03">#80000000</color>
+    <color name="gray_scale_b04">#4D000000</color>
+    <color name="gray_scale_b05">#1A000000</color>
+    <color name="gray_scale_b06">#FFF6F6F6</color>
+    <color name="gray_scale_b07">#FFE5E5E5</color>
+    <color name="gray_scale_b08">#909090</color>
+
+    <color name="text_color_default">#333333</color>
+    <color name="text_error_default">#FF426F</color>
+    <color name="edit_text_line_color_default">#51D6CE</color>
+    <color name="edit_text_line_color_error">#FF426F</color>
+
+    <color name="filled_button_enabled">#51D6CE</color>
+    <color name="filled_button_highlight">#8AFFFF</color>
+    <color name="filled_button_disabled">#D0D0D0</color>
+    <color name="filled_button_enabled_content">#FFFFFF</color>
+    <color name="filled_button_highlight_content">#FFFFFF</color>
+    <color name="filled_button_disabled_content">#FFFFFF</color>
+
+    <color name="filled_button_sub_enabled">#F5F5F5</color>
+    <color name="filled_button_sub_highlight">#C2C2C2</color>
+    <color name="filled_button_sub_disabled">#D0D0D0</color>
+    <color name="filled_button_sub_enabled_content">#ABB0BF</color>
+    <color name="filled_button_sub_highlight_content">#FFFFFF</color>
+    <color name="filled_button_sub_disabled_content">#FFFFFF</color>
+
+    <color name="group_bottom_nav_enabled">#333333</color>
+    <color name="group_bottom_nav_disabled">#ABB0BF</color>
+
+    <color name="globalDividerColor">#F1F1F1</color>
+
+    <color name="chat_background_mine_normal">#51D6CE</color>
+    <color name="chat_background_mine_send">#9951D6CE</color>
+
+    <color name="image_album_button_enabled">#51D6CE</color>
+    <color name="image_album_button_disabled">#D0D0D0</color>
+
+    <color name="main_contact_normal">#E4E6EA</color>
+    <color name="main_contact_error">@color/text_error_default</color>
+
+    <color name="main_withdraw_check_normal">#333333</color>
+    <color name="main_withdraw_check_error">@color/text_error_default</color>
+
+    <color name="page_descriptor_enabled">#C5CED7</color>
+    <color name="page_descriptor_disabled">#E4E6EA</color>
+
+    <color name="plan_home_registered_dday_today">#6276E6</color>
+    <color name="plan_home_registered_dday_left">#8B909E</color>
+
+    <color name="plan_home_history_today">#51D6CE</color>
+    <color name="plan_home_history_left">#EBEEF2</color>
+
+    <color name="center_start_friend_active">#FFFFFF</color>
+    <color name="center_start_friend_inactive">#F9F9FA</color>
+
+    <color name="plan_move_sheet_location_near">#3478F6</color>
+    <color name="plan_move_sheet_location_far">#F3851F</color>
+
+    <color name="battery_full">#00FF38</color>
+    <color name="battery_half">#FDB724</color>
+    <color name="battery_low">#FF3E1C</color>
+
+    <color name="transparent">#00000000</color>
+
+
 </resources>

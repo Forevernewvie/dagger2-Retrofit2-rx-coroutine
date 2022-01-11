@@ -1,11 +1,12 @@
 package com.example.ktrotest.data.dailyBoxOffice.local
 
 import com.example.ktrotest.model.DailyBoxOffice
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 
 interface DailyBoxOfficeLocalDataSource {
-     suspend fun insert(boxOffice: DailyBoxOffice)
-     fun localFetchBoxOffice() : Flow<List<DailyBoxOffice>>
-     suspend fun delete()
-     fun localFetchMovieName() : Flow<List<String>>
+     fun insert(boxOffice: List<DailyBoxOffice>): Completable
+     fun localFetchBoxOffice() : Single<List<DailyBoxOffice>>
+     fun delete(): Completable
+     fun localFetchMovieName() : Single<List<String>>
 }

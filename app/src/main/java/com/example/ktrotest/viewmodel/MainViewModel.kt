@@ -1,35 +1,28 @@
 package com.example.ktrotest.viewmodel
 
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.*
+import com.example.ktrotest.base.BaseViewModel
 import com.example.ktrotest.data.dailyBoxOffice.DailyBoxOfficeRepository
 import com.example.ktrotest.model.DailyBoxOffice
-import com.example.ktrotest.model.OfficeResult
-import com.example.ktrotest.util.Api
 import com.example.ktrotest.util.DateSetter.getDate
 import com.example.ktrotest.util.DateSetter.getMonth
 import com.example.ktrotest.util.DateSetter.getYear
 import com.example.ktrotest.util.DateSetter.nowDate
-import com.example.ktrotest.util.DateSetter.yesterDay
 import com.example.ktrotest.util.dateFormat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Response
-import timber.log.Timber
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
-//flow는 연속된 데이터를 내보내지만
-//suspend fun은 연속된 값을 반환할수 없다
+//flow는 연속된 데이터를 내보내지만(지속적으로 뷰가 바뀌어야 하는 항목에 flow ex) 좋아요, 북마크 수)
+//suspend fun은 연속된 값을 반환할 수 없다(한번 출력되고 재호출 전까지 바뀔일 없는것들)
+
+//Rxjava -> ???
 
 class MainViewModel @Inject constructor(
     private val dailyBoxOfficeRepository: DailyBoxOfficeRepository
-): ViewModel() {
+): BaseViewModel() {
 
     private val _dailyBoxOfficeInfo = MutableLiveData<List<DailyBoxOffice>>()
     val dailyBoxOfficeInfo: LiveData<List<DailyBoxOffice>> = _dailyBoxOfficeInfo
@@ -38,61 +31,85 @@ class MainViewModel @Inject constructor(
     val fetchMsg:LiveData<String>
         get() = _fetchMsg
 
+    private val _fetchBoxOffice = MutableLiveData<List<DailyBoxOffice>>()
+    val fetchBoxOffice:LiveData<List<DailyBoxOffice>>
+        get() = _fetchBoxOffice
+
     //양방향 데이터 바인딩, 접근 제한자 있으면 동작안됨
-    val _year = MutableLiveData<Int>()
-    val year:LiveData<Int>
-        get() = _year
+    var year = MutableLiveData<Int>()
+    var month = MutableLiveData<Int>()
+    var day = MutableLiveData<Int>()
 
-    val _month = MutableLiveData<Int>()
-    val month:LiveData<Int>
-        get() = _month
-
-    val _day = MutableLiveData<Int>()
-    val day: LiveData<Int>
-        get() = _day
 
     init {
-        _year.value = getYear(nowDate)
-        _month.value = getMonth(nowDate)
-        _day.value = getDate(nowDate)
-    }
-
-    //room movieName fetch
-    fun getMovieName() = viewModelScope.launch(Dispatchers.IO) {
-        dailyBoxOfficeRepository.localFetchMovieName().collect {
-            _fetchMsg.postValue(it.toString())
-        }
-    }
-
-    fun insertBoxOffice() = viewModelScope.launch(Dispatchers.IO) {
-        _dailyBoxOfficeInfo.value?.forEach {
-            dailyBoxOfficeRepository.insertBoxOfficeData(it)
-        }
-    }
-
-    //room entire boxOffice fetch
-    fun getBoxOfficeInfo() = viewModelScope.launch  {
-        dailyBoxOfficeRepository.localFetchBoxOffice().collect {
-            _fetchMsg.postValue(it.toString())
-        }
-    }
-
-    //room delete
-    fun deleteBoxOfficeInfo() = viewModelScope.launch(Dispatchers.IO){
-        dailyBoxOfficeRepository.deleteBoxOffice()
+        year.value = getYear(nowDate)
+        month.value = getMonth(nowDate)
+        day.value = getDate(nowDate)
     }
 
     private fun getDateInfo():String{
         return year.value.toString() + month.value?.dateFormat() + day.value?.dateFormat()
     }
 
+    //room movieName fetch
+    fun getMovieName(){
+        compositeDisposable.add(
+            dailyBoxOfficeRepository.localFetchMovieName()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { movie ->
+                    _fetchMsg.postValue(movie.toString())
+                }
+        )
+    }
+
+    fun insertBoxOffice() {
+        compositeDisposable.add(
+            _dailyBoxOfficeInfo.value.let {
+                dailyBoxOfficeRepository.insertBoxOfficeData(it!!)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe()
+            }
+        )
+
+    }
+
+    //room entire boxOffice fetch
+    fun getBoxOfficeInfo() {
+        compositeDisposable.add(
+            dailyBoxOfficeRepository.localFetchBoxOffice()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe{ movieData ->
+                    _fetchMsg.postValue(movieData.toString())
+                }
+        )
+    }
+
+    //room delete
+    fun deleteBoxOfficeInfo() {
+        compositeDisposable.add(
+            dailyBoxOfficeRepository.deleteBoxOffice()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        )
+    }
+
+
 
 
     //err Handling 첫째. 데이터가 없을때 상황
+    fun getDailyBoxOfficeByKtor()  {
+        compositeDisposable.add(
+            dailyBoxOfficeRepository.remoteFetchBoxOfficeData(getDateInfo())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe{ data->
+                    _dailyBoxOfficeInfo.postValue(data.boxOfficeResult.dailyBoxOfficeList)
+                }
+        )
 
-    fun getDailyBoxOfficeByKtor() =viewModelScope.launch {
-        _dailyBoxOfficeInfo.let {
-            it.postValue(dailyBoxOfficeRepository.remoteFetchBoxOfficeData(getDateInfo()))
-        }
     }
 }

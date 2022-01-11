@@ -2,19 +2,20 @@ package com.example.ktrotest.data.dailyBoxOffice.local
 
 import androidx.room.*
 import com.example.ktrotest.model.DailyBoxOffice
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface BoxOfficeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-     fun insert(boxOffice: DailyBoxOffice)
+     fun insert(boxOffice: List<DailyBoxOffice>): Completable
 
      @Query("Delete from boxOffice")
-     fun delete()
+     fun delete(): Completable
 
      @Query("Select movieNm From boxOffice")
-     fun getMovieName() : Flow<List<String>>
+     fun getMovieName() : Single<List<String>>
 
     @Query("Select * From boxOffice")
-     fun getBoxOffice() : Flow<List<DailyBoxOffice>>
+     fun getBoxOffice() : Single<List<DailyBoxOffice>>
 }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import dagger.android.support.DaggerAppCompatActivity
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -21,7 +22,7 @@ abstract class BaseActivity<B: ViewDataBinding>(
 ) :AppCompatActivity() {
 
     lateinit var binding: B
-
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +30,10 @@ abstract class BaseActivity<B: ViewDataBinding>(
         binding.lifecycleOwner = this
     }
 
+    override fun onDestroy() {
+        compositeDisposable.dispose()
+        super.onDestroy()
+    }
 
     protected fun showToast(msg:String){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()
