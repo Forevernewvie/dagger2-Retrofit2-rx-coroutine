@@ -58,7 +58,7 @@ class MainViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { movie ->
-                    _fetchMsg.postValue(movie.toString())
+                    _fetchMsg.post(movie.toString())
                 }
         )
     }
@@ -81,7 +81,7 @@ class MainViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ movieData ->
-                    _fetchMsg.postValue(movieData.toString())
+                    _fetchMsg.post(movieData.toString())
                 }
         )
     }
@@ -92,7 +92,10 @@ class MainViewModel @Inject constructor(
             dailyBoxOfficeRepository.deleteBoxOffice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe()
+                .subscribe{
+                    _fetchMsg.post("")
+                    _dailyBoxOfficeInfo.post(listOf())
+                }
         )
     }
 
@@ -103,7 +106,7 @@ class MainViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe{ data->
-                    _dailyBoxOfficeInfo.postValue(data.boxOfficeResult.dailyBoxOfficeList)
+                    _dailyBoxOfficeInfo.post(data.boxOfficeResult.dailyBoxOfficeList)
                 }
         )
     }
