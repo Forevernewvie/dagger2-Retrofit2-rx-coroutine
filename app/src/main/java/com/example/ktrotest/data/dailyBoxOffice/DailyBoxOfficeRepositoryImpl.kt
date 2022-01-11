@@ -6,6 +6,7 @@ import com.example.ktrotest.data.dailyBoxOffice.remote.DailyBoxOfficeRemoteDataS
 import com.example.ktrotest.model.DailyBoxOffice
 import com.example.ktrotest.model.OfficeResult
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class DailyBoxOfficeRepositoryImpl @Inject constructor(
         dailyBoxOfficeLocalDataSource.insert(boxOffice)
 
 
-    override fun localFetchBoxOffice(): Single<List<DailyBoxOffice>> {
+    override fun localFetchBoxOffice(): Flowable<List<DailyBoxOffice>> {
         return dailyBoxOfficeLocalDataSource.localFetchBoxOffice()
     }
 
@@ -31,8 +32,11 @@ class DailyBoxOfficeRepositoryImpl @Inject constructor(
         dailyBoxOfficeLocalDataSource.delete()
 
 
-    override fun localFetchMovieName(): Single<List<String>> {
+    override fun localFetchMovieName(): Flowable<List<String>> {
         return dailyBoxOfficeLocalDataSource.localFetchMovieName()
     }
+
+    override fun deleteBelowFiveMovies(): Completable =
+        dailyBoxOfficeLocalDataSource.deleteBelowFiveMovies()
 
 }

@@ -35,7 +35,7 @@ class MainViewModel @Inject constructor(
     val fetchBoxOffice:LiveData<List<DailyBoxOffice>>
         get() = _fetchBoxOffice
 
-    //양방향 데이터 바인딩, 접근 제한자 있으면 동작안됨
+    //양방향 데이터 바인딩
     var year = MutableLiveData<Int>()
     var month = MutableLiveData<Int>()
     var day = MutableLiveData<Int>()
@@ -86,16 +86,22 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    fun deleteBelowFiveMovies(){
+        compositeDisposable.add(
+            dailyBoxOfficeRepository.deleteBelowFiveMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        )
+    }
+
     //room delete
     fun deleteBoxOfficeInfo() {
         compositeDisposable.add(
             dailyBoxOfficeRepository.deleteBoxOffice()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe{
-                    _fetchMsg.post("")
-                    _dailyBoxOfficeInfo.post(listOf())
-                }
+                .subscribe()
         )
     }
 

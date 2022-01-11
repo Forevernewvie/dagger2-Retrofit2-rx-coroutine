@@ -68,7 +68,7 @@
         android:onClick="@{() -> mainVM.getBoxOfficeInfo()}"
         />
     <Button
-        android:id="@+id/event_btn"
+        android:id="@+id/delete_five_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -76,7 +76,8 @@
         app:layout_constraintBottom_toTopOf="@id/request_btn"
         app:layout_constraintStart_toEndOf="@+id/delete_btn"
         app:layout_constraintEnd_toStartOf="@+id/request_moviename_btn"
-        android:text="event"
+        android:text="@string/delete_five_btn"
+        android:onClick="@{() -> mainVM.deleteBelowFiveMovies()}"
         />
 
     <Button

@@ -3,6 +3,7 @@ package com.example.ktrotest.data.dailyBoxOffice.local
 import androidx.room.*
 import com.example.ktrotest.model.DailyBoxOffice
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 
 @Dao
@@ -14,8 +15,11 @@ interface BoxOfficeDao {
      fun delete(): Completable
 
      @Query("Select movieNm From boxOffice")
-     fun getMovieName() : Single<List<String>>
+     fun getMovieName() : Flowable<List<String>>
 
     @Query("Select * From boxOffice")
-     fun getBoxOffice() : Single<List<DailyBoxOffice>>
+     fun getBoxOffice() : Flowable<List<DailyBoxOffice>>
+
+     @Query( "Delete From boxOffice where rank >=5")
+     fun deleteBelowFiveMovies(): Completable
 }
