@@ -72,7 +72,6 @@ class MainViewModel @Inject constructor(
                     .subscribe()
             }
         )
-
     }
 
     //room entire boxOffice fetch
@@ -97,9 +96,6 @@ class MainViewModel @Inject constructor(
         )
     }
 
-
-
-
     //err Handling 첫째. 데이터가 없을때 상황
     fun getDailyBoxOfficeByKtor()  {
         compositeDisposable.add(
@@ -110,6 +106,5 @@ class MainViewModel @Inject constructor(
                     _dailyBoxOfficeInfo.postValue(data.boxOfficeResult.dailyBoxOfficeList)
                 }
         )
-
     }
 }
