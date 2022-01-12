@@ -1,11 +1,13 @@
 package com.example.ktrotest.data.dailyBoxOffice
 
 
+import androidx.lifecycle.LiveData
 import com.example.ktrotest.data.dailyBoxOffice.local.DailyBoxOfficeLocalDataSource
 import com.example.ktrotest.data.dailyBoxOffice.remote.DailyBoxOfficeRemoteDataSource
 import com.example.ktrotest.model.DailyBoxOffice
 import com.example.ktrotest.model.OfficeResult
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Call
 import javax.inject.Inject
 
 class DailyBoxOfficeRepositoryImpl @Inject constructor(
@@ -13,26 +15,24 @@ class DailyBoxOfficeRepositoryImpl @Inject constructor(
     private val dailyBoxOfficeLocalDataSource: DailyBoxOfficeLocalDataSource
 ): DailyBoxOfficeRepository{
 
-
-    override fun fetchBoxOfficeData(targetDt: String): Flow<List<DailyBoxOffice>> {
-        return dailyBoxOfficeRemoteDataSource.fetchBoxOfficeData(targetDt)
+    override suspend fun remoteFetchBoxOfficeData(targetDt: String): List<DailyBoxOffice> {
+        return dailyBoxOfficeRemoteDataSource.remoteFetchBoxOfficeData(targetDt).boxOfficeResult.dailyBoxOfficeList
     }
 
     override suspend fun insertBoxOfficeData(boxOffice: DailyBoxOffice) {
         dailyBoxOfficeLocalDataSource.insert(boxOffice)
     }
 
-
-    override  fun requestBoxOffice(): Flow<List<DailyBoxOffice>> {
-        return dailyBoxOfficeLocalDataSource.getBoxOffice()
+    override fun localFetchBoxOffice(): Flow<List<DailyBoxOffice>> {
+        return dailyBoxOfficeLocalDataSource.localFetchBoxOffice()
     }
 
     override suspend fun deleteBoxOffice() {
         dailyBoxOfficeLocalDataSource.delete()
     }
 
-    override  fun requestMovieName(): Flow<List<String>> {
-        return dailyBoxOfficeLocalDataSource.getMovieName()
+    override fun localFetchMovieName(): Flow<List<String>> {
+        return dailyBoxOfficeLocalDataSource.localFetchMovieName()
     }
 
 }

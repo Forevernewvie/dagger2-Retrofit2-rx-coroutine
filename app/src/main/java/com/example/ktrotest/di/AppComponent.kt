@@ -6,6 +6,7 @@ import com.example.ktrotest.di.data.RemoteModule
 import com.example.ktrotest.di.data.RepositoryModule
 import dagger.BindsInstance
 import dagger.Component
+import dagger.android.AndroidInjector
 import javax.inject.Singleton
 
 // dagger2 위밋 앱 코드 참조 작성
@@ -13,13 +14,41 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [RemoteModule::class,RepositoryModule::class ,LocalModule::class,ViewModelModule::class,ViewModelFactoryModule::class,SubComponentModule::class])
-interface AppComponent {
+interface AppComponent: AndroidInjector<MyApp> {
 
     @Component.Factory
     interface Factory{
-        fun create(@BindsInstance context: Context) : AppComponent
+        fun create( @BindsInstance context: Context) : AppComponent
     }
 
     fun mainComponent() : MainComponent.Factory
 
 }
+
+//@BindsInstance 인스턴스를 구성요소에 바인딩
+//AppComponent가 context를 요소로 가지고 이 컴포넌트에 바인딩된 모듈에서는 context 자유롭게 사용가능
+
+/*
+빌더
+1. 주입해 줄 속성이 있다면 @BindsInstance + 함수 하나, 반환형 Builder로 다 만들어줘야됨로 ex)
+       // context 종속성 바인딩 함수
+        @BindsInstance
+        fun application(context: Context): Builder
+
+        // age 종속성 바인딩 함수
+        @BindsInstance
+        fun age(age: Int): Builder
+
+2. 빌더 할때도 메서드 체이닝 하나하나 다 설정해주어야됨 ex)
+DaggerAppComponent
+    .builder().application(this) .age(20)환
+
+3. Component 타입 반드시 하나 반
+*/
+
+
+/*
+팩토리
+1. 모듈에 주입해줄 뭔가가 있다면(ex context..etc) @BindsInstance로 매개변수를 늘려주면 된다
+2. Component 타입 반드시 하나 반
+ */

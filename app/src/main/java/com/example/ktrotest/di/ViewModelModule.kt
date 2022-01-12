@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import com.example.ktrotest.viewmodel.MainViewModel
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import dagger.Reusable
 import dagger.multibindings.IntoMap
+import javax.inject.Singleton
 
 @Module
 abstract class ViewModelModule {

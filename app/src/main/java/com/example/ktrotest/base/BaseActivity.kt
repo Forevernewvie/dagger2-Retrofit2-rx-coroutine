@@ -7,6 +7,12 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlin.coroutines.CoroutineContext
 
 // 위밋 앱 코드 참조 작성
 
@@ -16,11 +22,13 @@ abstract class BaseActivity<B: ViewDataBinding>(
 
     lateinit var binding: B
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,layoutId)
         binding.lifecycleOwner = this
     }
+
 
     protected fun showToast(msg:String){
         Toast.makeText(this,msg,Toast.LENGTH_SHORT).show()

@@ -1,28 +1,28 @@
 package com.example.ktrotest.data.dailyBoxOffice.remote
 
-import com.example.ktrotest.Api
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.ktrotest.util.Api
 import com.example.ktrotest.model.DailyBoxOffice
+import com.example.ktrotest.model.MovieApi
 import com.example.ktrotest.model.OfficeResult
+import com.example.ktrotest.util.fetchBoxOfficeData
 import io.ktor.client.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
+import timber.log.Timber
 import javax.inject.Inject
 
 class DailyBoxOfficeRemoteDataSourceImpl @Inject constructor
-    (private val httpClient: HttpClient) : DailyBoxOfficeRemoteDataSource {
+    (private val movieApi: MovieApi) :
+    DailyBoxOfficeRemoteDataSource {
 
-    override fun fetchBoxOfficeData(targetDt: String): Flow<List<DailyBoxOffice>> = flow {
-            val result = httpClient.get<OfficeResult>(Api.url){
-                method = HttpMethod.Get
-                parameter("key",Api.key)
-                parameter("targetDt",targetDt)
-            }
-        val data = result.boxOfficeResult.dailyBoxOfficeList
-        // data 발행/생성
-        emit(data.filter {
-            it.rank.toInt() <=5
-        })
+    override suspend fun remoteFetchBoxOfficeData(targetDt: String): OfficeResult{
+        return movieApi.fetchBoxOfficeMovieList(Api.KEY,targetDt)
     }
 }
